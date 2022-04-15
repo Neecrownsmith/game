@@ -1,0 +1,133 @@
+import random, sys, os, time
+
+class Player:
+	def __init__(self, point=0, choice=0):
+		self.point=point
+		self.choice=choice
+		self.point=0
+
+	def possible_value(self):
+		return [1, 2, 3, 4]
+		
+	def pick(self):
+		self.choice =int(input('say your number: '))
+		while self.choice not in [1, 2, 3, 4]:
+			print('You can only pick between 1 and 4')
+			self.choice =int(input('say your number: '))
+
+		return self.choice
+		
+	def score(self):
+		self.point = self.choice
+		return self.point
+		
+		
+class Computer(Player):
+	def __init__(self):
+		super().__init__(point=0, choice=0)
+	
+	def pick(self):
+		self.choice=random.randint(1,4)
+		print('say your number: '+str(self.choice))
+		
+		return self.choice
+class Game:
+	
+	def humanVsHuman(self):
+		niyi = Player()
+		rob= Player()
+		present_score=0
+		counter=0
+		game= True
+
+		while game == True:
+			if present_score < 11:
+				print('player1')
+				if niyi.pick() in niyi.possible_value():
+					present_score+=niyi.score()
+					counter+=1
+				if present_score<11:
+				    print('player2')
+				    if rob.pick() in rob.possible_value():
+		    			present_score+=rob.score()
+		    			counter+=1
+			else:
+			   	game= False
+		if counter % 2 == 1:
+			print('player1 wins!') 	
+		else:
+			print('player2 wins!')
+			
+	def humanVsComputer(self):
+		niyi = Player()
+		computer=Computer()
+		present_score=0
+		counter=0
+		game= True
+
+		while game == True:
+			if present_score < 11:
+				print('player1')
+				if niyi.pick() in niyi.possible_value():
+					present_score+=niyi.score()
+					counter+=1
+				if present_score<11:
+				    print('player2')
+				    if present_score<7:
+				    	present_score+=computer.pick()
+				    elif present_score >=7:
+				    		sys.stdout = open(os.devnull, 'w')
+				    		while present_score+computer.pick()<11:
+				    			continue
+				    		sys.stdout = sys.__stdout__
+				    		present_score+=computer.pick()
+				    		
+				    	
+			else:
+				game= False
+		if counter % 2 == 1:
+			print('player1 wins!') 	
+		else:
+			print('player2 wins!')
+			
+	def computerVsComputer(self):
+		niyi = Computer()
+		rob= Computer()
+		present_score=0
+		counter=0
+		game= True
+
+		while game == True:
+			if present_score < 11:
+				print('player1')
+				present_score+=niyi.pick()
+				time.sleep(1)
+				if present_score<11:
+				    print('player2')
+				    present_score+=rob.pick()
+				    time.sleep(1)
+				    counter+=1
+			else:
+			   	game= False
+		if counter % 2 == 1:
+			print('player1 wins!') 	
+		else:
+			print('player2 wins!')
+
+game=Game()
+replay=1
+print('..................11 Game')
+game_mode=input('Type in game mode\n1: Human vs Human\n2: Human vs Computer\n3: Computer vs Computer\nEnter your selection: ')
+while game_mode not in ['1', '2', '3']:
+	game_mode=input('Type in game mode\n1: Human vs Human\n2: Human vs Computer\n3: Computer vs Computer\nEnter your selection: ')
+while replay==1:
+	game_mode=int(game_mode)
+	if game_mode==1:
+		game.humanVsHuman()
+	elif game_mode==2:
+		game.humanVsComputer()
+	elif game_mode==3:
+		game.computerVsComputer()
+	time.sleep(1)
+	print('Do you want to play again?')
+	replay=int(input('1: Yes\n2: No\nEnter your selection:'))
